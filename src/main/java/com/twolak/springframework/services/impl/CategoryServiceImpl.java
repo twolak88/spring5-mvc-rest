@@ -6,6 +6,8 @@ package com.twolak.springframework.services.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.twolak.springframework.api.v1.mapper.CategoryMapper;
 import com.twolak.springframework.api.v1.model.CategoryDTO;
 import com.twolak.springframework.repositories.CategoryRepository;
@@ -15,6 +17,7 @@ import com.twolak.springframework.services.CategoryService;
  * @author twolak
  *
  */
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
