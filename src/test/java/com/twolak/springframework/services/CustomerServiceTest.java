@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,6 +72,50 @@ class CustomerServiceTest {
 		assertEquals(LASTNAME, customerDTO.getLastname());
 		assertEquals(CUSTOMER_URL_PREFIX + ID, customerDTO.getCustomerUrl());
 		verify(this.customerRepository, times(1)).findById(anyLong());
+		verifyNoMoreInteractions(this.customerRepository);
+	}
+	
+	@Test
+	void testCreateNewCustomer() {
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setFirstname(FIRSTNAME);
+		customerDTO.setLastname(LASTNAME);
+		
+		Customer savedCustomer = new Customer();
+		savedCustomer.setFirstname(FIRSTNAME);
+		savedCustomer.setLastname(LASTNAME);
+		savedCustomer.setId(ID);
+		
+		when(this.customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+		
+		CustomerDTO savedCustomerDTO = this.customerService.createNewCustomer(customerDTO);
+		
+		assertEquals(customerDTO.getFirstname(), savedCustomerDTO.getFirstname());
+		assertEquals(customerDTO.getLastname(), savedCustomerDTO.getLastname());
+		assertEquals(CUSTOMER_URL_PREFIX + ID, savedCustomerDTO.getCustomerUrl());
+		verify(this.customerRepository, times(1)).save(any(Customer.class));
+		verifyNoMoreInteractions(this.customerRepository);
+	}
+	
+	@Test
+	void testUpdateCustomer() {
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setFirstname(FIRSTNAME);
+		customerDTO.setLastname(LASTNAME);
+		
+		Customer savedCustomer = new Customer();
+		savedCustomer.setFirstname(FIRSTNAME);
+		savedCustomer.setLastname(LASTNAME);
+		savedCustomer.setId(ID);
+		
+		when(this.customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+		
+		CustomerDTO savedCustomerDTO = this.customerService.updateCustomer(ID, customerDTO);
+		
+		assertEquals(customerDTO.getFirstname(), savedCustomerDTO.getFirstname());
+		assertEquals(customerDTO.getLastname(), savedCustomerDTO.getLastname());
+		assertEquals(CUSTOMER_URL_PREFIX + ID, savedCustomerDTO.getCustomerUrl());
+		verify(this.customerRepository, times(1)).save(any(Customer.class));
 		verifyNoMoreInteractions(this.customerRepository);
 	}
 

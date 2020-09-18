@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.twolak.springframework.api.v1.model.CustomerDTO;
@@ -33,5 +36,15 @@ public class CustomerController {
 	@GetMapping("{id}")
 	public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("id") Long id) {
 		return new ResponseEntity<CustomerDTO>(this.customerService.getCustomerById(id), HttpStatus.OK);
+	}
+	
+	@PostMapping
+	public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO) {
+		return new ResponseEntity<CustomerDTO>(this.customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
+	}
+	
+	@PutMapping("{id}")
+	public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("id") Long id, @RequestBody CustomerDTO customerDTO) {
+		return new ResponseEntity<CustomerDTO>(this.customerService.updateCustomer(id, customerDTO), HttpStatus.OK);
 	}
 }
