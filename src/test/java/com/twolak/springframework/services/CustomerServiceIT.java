@@ -1,0 +1,109 @@
+/**
+ * 
+ */
+package com.twolak.springframework.services;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import com.twolak.springframework.api.v1.mapper.CustomerMapper;
+import com.twolak.springframework.api.v1.model.CustomerDTO;
+import com.twolak.springframework.bootstrap.Bootstrap;
+import com.twolak.springframework.domain.Customer;
+import com.twolak.springframework.repositories.CategoryRepository;
+import com.twolak.springframework.repositories.CustomerRepository;
+import com.twolak.springframework.services.impl.CustomerServiceImpl;
+
+/**
+ * @author twolak
+ *
+ */
+@ExtendWith(SpringExtension.class)
+@DataJpaTest
+class CustomerServiceIT {
+	
+	@Autowired
+	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	private CustomerService customerService;
+	
+	@BeforeEach
+	void setUp() throws Exception {
+		Bootstrap bootstrap = new Bootstrap(this.categoryRepository, this.customerRepository);
+		bootstrap.run();
+		
+		this.customerService = new CustomerServiceImpl(this.customerRepository, CustomerMapper.INSANCE);
+	}
+	
+//	@AfterEach
+//	void clean() {
+//		this.categoryRepository.deleteAll();
+//		this.customerRepository.deleteAll();
+//	}
+	
+	@Test
+	void testPatchCustomerFirstname() {
+		String updatedName = "UpdatedName";
+		Long id = getCustomerIdValue();
+		
+		Customer originalCustomer = this.customerRepository.getOne(id);
+		assertNotNull(originalCustomer);
+		
+		String originalFirstname = originalCustomer.getFirstname();
+		String originalLastname = originalCustomer.getLastname();
+		
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setFirstname(updatedName);
+		
+		this.customerService.patchCustomer(id, customerDTO);
+		Customer updatedCustomer = this.customerRepository.findById(id).get();
+		
+		assertNotNull(updatedCustomer);
+		assertEquals(updatedName, updatedCustomer.getFirstname());
+		assertThat(originalFirstname, not(equalTo(updatedCustomer.getFirstname())));
+		assertThat(originalLastname, equalTo(updatedCustomer.getLastname()));
+	}
+	
+	@Test
+	void testPatchCustomerLastname() {
+		String updatedName = "UpdatedName";
+		Long id = getCustomerIdValue();
+		
+		Customer originalCustomer = this.customerRepository.getOne(id);
+		assertNotNull(originalCustomer);
+		
+		String originalFirstname = originalCustomer.getFirstname();
+		String originalLastname = originalCustomer.getLastname();
+		
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setLastname(updatedName);
+		
+		this.customerService.patchCustomer(id, customerDTO);
+		Customer updatedCustomer = this.customerRepository.findById(id).get();
+		
+		assertNotNull(updatedCustomer);
+		assertEquals(updatedName, updatedCustomer.getLastname());
+		assertThat(originalFirstname, equalTo(updatedCustomer.getFirstname()));
+		assertThat(originalLastname, not(equalTo(updatedCustomer.getLastname())));
+	}
+	
+	private Long getCustomerIdValue() {
+		List<Customer> customers = this.customerRepository.findAll();
+		return customers.get(0).getId();
+	}
+
+}

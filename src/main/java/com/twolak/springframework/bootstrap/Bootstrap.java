@@ -46,11 +46,13 @@ public class Bootstrap implements CommandLineRunner {
 	}
 	
 	private void loadCustomers() {
+		if (this.customerRepository.count() > 0) return;
 		createCustomer("Mike", "Weston");
 		createCustomer("Sam", "Axe");
 	}
 	
 	private void createCategory(String name) {
+		if (this.categoryRepository.findByName(name) != null) return;
 		Category category = new Category();
 		category.setName(name);
 		this.categoryRepository.save(category);
