@@ -19,8 +19,13 @@ import com.twolak.springframework.services.CategoryService;
  *
  */
 @Controller
-@RequestMapping("/api/v1/categories")
+@RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
+	
+	public static final String BASE_URL = "/api/v1/categories";
+	public static final String NAME_PROPERTY = "name";
+	public static final String NAME_URL_PROPERTY = "{" + NAME_PROPERTY + "}";
+	
 	private final CategoryService categoryService;
 
 	public CategoryController(CategoryService categoryService) {
@@ -32,8 +37,8 @@ public class CategoryController {
 		return new ResponseEntity<CategoryListDTO>(new CategoryListDTO(this.categoryService.getAllCategories()),HttpStatus.OK);
 	}
 	
-	@GetMapping("{name}")
-	public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable("name") String name) {
+	@GetMapping(NAME_URL_PROPERTY)
+	public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable(NAME_PROPERTY) String name) {
 		return new ResponseEntity<CategoryDTO>(this.categoryService.getCategoryByName(name), HttpStatus.OK);
 	}
 	

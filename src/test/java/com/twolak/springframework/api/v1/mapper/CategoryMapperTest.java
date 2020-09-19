@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.twolak.springframework.api.v1.model.CategoryDTO;
 import com.twolak.springframework.domain.Category;
+import com.twolak.springframework.mapper.CategoryMapper;
 
 /**
  * @author twolak

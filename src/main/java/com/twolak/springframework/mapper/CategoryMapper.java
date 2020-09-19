@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.twolak.springframework.api.v1.mapper;
+package com.twolak.springframework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

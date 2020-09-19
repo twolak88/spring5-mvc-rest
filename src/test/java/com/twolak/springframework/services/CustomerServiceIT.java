@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.twolak.springframework.api.v1.mapper.CustomerMapper;
 import com.twolak.springframework.api.v1.model.CustomerDTO;
 import com.twolak.springframework.bootstrap.Bootstrap;
 import com.twolak.springframework.domain.Customer;
+import com.twolak.springframework.mapper.CustomerMapper;
 import com.twolak.springframework.repositories.CategoryRepository;
 import com.twolak.springframework.repositories.CustomerRepository;
 import com.twolak.springframework.services.impl.CustomerServiceImpl;
@@ -33,6 +33,8 @@ import com.twolak.springframework.services.impl.CustomerServiceImpl;
 @DataJpaTest
 class CustomerServiceIT {
 	
+	private static final String UPDATED_NAME = "UpdatedName";
+
 	@Autowired
 	private CustomerRepository customerRepository;
 	
@@ -57,7 +59,7 @@ class CustomerServiceIT {
 	
 	@Test
 	void testPatchCustomerFirstname() {
-		String updatedName = "UpdatedName";
+		String updatedName = UPDATED_NAME;
 		Long id = getCustomerIdValue();
 		
 		Customer originalCustomer = this.customerRepository.getOne(id);
@@ -80,7 +82,7 @@ class CustomerServiceIT {
 	
 	@Test
 	void testPatchCustomerLastname() {
-		String updatedName = "UpdatedName";
+		String updatedName = UPDATED_NAME;
 		Long id = getCustomerIdValue();
 		
 		Customer originalCustomer = this.customerRepository.getOne(id);

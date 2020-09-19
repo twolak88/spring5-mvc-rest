@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.twolak.springframework.api.v1.mapper.CustomerMapper;
 import com.twolak.springframework.api.v1.model.CustomerDTO;
 import com.twolak.springframework.domain.Customer;
+import com.twolak.springframework.mapper.CustomerMapper;
 import com.twolak.springframework.repositories.CustomerRepository;
 import com.twolak.springframework.services.CustomerService;
 
@@ -64,6 +64,11 @@ public class CustomerServiceImpl implements CustomerService {
 			}
 			return this.customerMapper.customerToCustomerDTO(this.customerRepository.save(customer));
 		}).orElseThrow(() -> new RuntimeException("Customer for id: " + id + " not found"));
+	}
+	
+	@Override
+	public void deleteCustomerById(Long id) {
+		this.customerRepository.deleteById(id);
 	}
 	
 	private CustomerDTO saveCustomer(Customer customer) {

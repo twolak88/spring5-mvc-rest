@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.twolak.springframework.api.v1.mapper.CategoryMapper;
 import com.twolak.springframework.api.v1.model.CategoryDTO;
+import com.twolak.springframework.mapper.CategoryMapper;
 import com.twolak.springframework.repositories.CategoryRepository;
 import com.twolak.springframework.services.CategoryService;
 

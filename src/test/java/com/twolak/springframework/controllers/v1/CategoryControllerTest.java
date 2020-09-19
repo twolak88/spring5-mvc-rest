@@ -27,7 +27,10 @@ import com.twolak.springframework.services.CategoryService;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryControllerTest {
-
+	
+	private static final long CAT_ID_2 = 2L;
+	private static final long CAT_ID_1 = 1L;
+	public static final String BASE_URL = CategoryController.BASE_URL;
 	public static final String CAT_NAME = "cat1";
 	public static final String CAT_NAME2 = "cat2";
 	
@@ -47,16 +50,16 @@ class CategoryControllerTest {
 	@Test
 	public void testListAllCategories() throws Exception {
 		CategoryDTO categoryDTO = new CategoryDTO();
-		categoryDTO.setId(1L);
+		categoryDTO.setId(CAT_ID_1);
 		categoryDTO.setName(CAT_NAME);
 		
 		CategoryDTO categoryDTO2 = new CategoryDTO();
-		categoryDTO2.setId(2L);
+		categoryDTO2.setId(CAT_ID_2);
 		categoryDTO2.setName(CAT_NAME2);
 		
 		when(this.categoryService.getAllCategories()).thenReturn(Arrays.asList(categoryDTO, categoryDTO2));
 		
-		this.mockMvc.perform(get("/api/v1/categories")
+		this.mockMvc.perform(get(BASE_URL)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.categories", hasSize(2)));
@@ -68,12 +71,12 @@ class CategoryControllerTest {
 	@Test
 	public void testGetByNameCategories() throws Exception {
 		CategoryDTO categoryDTO = new CategoryDTO();
-		categoryDTO.setId(1L);
+		categoryDTO.setId(CAT_ID_1);
 		categoryDTO.setName(CAT_NAME);
 		
 		when(this.categoryService.getCategoryByName(anyString())).thenReturn(categoryDTO);
 		
-		this.mockMvc.perform(get("/api/v1/categories/cat1")
+		this.mockMvc.perform(get(BASE_URL + "/" + CAT_NAME)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.name", equalTo(CAT_NAME)));

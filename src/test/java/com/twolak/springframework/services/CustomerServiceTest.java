@@ -18,9 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.twolak.springframework.api.v1.mapper.CustomerMapper;
 import com.twolak.springframework.api.v1.model.CustomerDTO;
+import com.twolak.springframework.controllers.v1.CustomerController;
 import com.twolak.springframework.domain.Customer;
+import com.twolak.springframework.mapper.CustomerMapper;
 import com.twolak.springframework.repositories.CustomerRepository;
 import com.twolak.springframework.services.impl.CustomerServiceImpl;
 
@@ -30,7 +31,7 @@ import com.twolak.springframework.services.impl.CustomerServiceImpl;
  */
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
-	private static final String CUSTOMER_URL_PREFIX = "/api/v1/customers/";
+	private static final String CUSTOMER_URL_PREFIX = CustomerController.BASE_URL + "/";
 	private static final Long ID = 1L;
 	private static final String FIRSTNAME = "Tom";
 	private static final String PATCHED_FIRSTNAME = "Rob";
@@ -147,5 +148,12 @@ class CustomerServiceTest {
 		verify(this.customerRepository, times(1)).findById(anyLong());
 		verifyNoMoreInteractions(this.customerRepository);
 	}
-
+	
+	@Test
+	void testDeleteCustomerById() {
+		this.customerRepository.deleteById(ID);
+		
+		verify(this.customerRepository, times(1)).deleteById(anyLong());
+		verifyNoMoreInteractions(this.customerRepository);
+	}
 }

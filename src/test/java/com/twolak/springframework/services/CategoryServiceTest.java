@@ -19,9 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.twolak.springframework.api.v1.mapper.CategoryMapper;
 import com.twolak.springframework.api.v1.model.CategoryDTO;
 import com.twolak.springframework.domain.Category;
+import com.twolak.springframework.mapper.CategoryMapper;
 import com.twolak.springframework.repositories.CategoryRepository;
 import com.twolak.springframework.services.impl.CategoryServiceImpl;
 
