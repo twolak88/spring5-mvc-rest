@@ -33,6 +33,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.twolak.springframework.api.v1.model.CustomerDTO;
 import com.twolak.springframework.services.CustomerService;
+import com.twolak.springframework.services.ResourceNotFoundException;
+
 import static com.twolak.springframework.controllers.v1.AbstractRestControllerTest.asJsonString;
 
 /**
@@ -58,7 +60,8 @@ class CustomerControllerTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		this.mockMvc = MockMvcBuilders.standaloneSetup(this.customerController).build();
+		this.mockMvc = MockMvcBuilders.standaloneSetup(this.customerController)
+				.setControllerAdvice(new RestResponseEntityExceptionHandler()).build();
 	}
 
 	@Test
@@ -97,6 +100,15 @@ class CustomerControllerTest {
 			.andExpect(jsonPath("$.lastname", equalTo(LASTNAME)));
 		verify(this.customerService, times(1)).getCustomerById(anyLong());
 		verifyNoMoreInteractions(this.customerService);
+	}
+	
+	@Test
+	public void testGetByIdNotFound() throws Exception {
+		when(this.customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+		
+		this.mockMvc.perform(get(CUSTOMER_URL_PREFIX + CUST_ID_1)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
 	}
 	
 	@Test

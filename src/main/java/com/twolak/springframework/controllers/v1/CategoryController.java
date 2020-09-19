@@ -4,11 +4,11 @@
 package com.twolak.springframework.controllers.v1;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.twolak.springframework.api.v1.model.CategoryDTO;
 import com.twolak.springframework.api.v1.model.CategoryListDTO;
@@ -18,7 +18,7 @@ import com.twolak.springframework.services.CategoryService;
  * @author twolak
  *
  */
-@Controller
+@RestController
 @RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
 	
@@ -33,13 +33,15 @@ public class CategoryController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<CategoryListDTO> getAllCategories(){
-		return new ResponseEntity<CategoryListDTO>(new CategoryListDTO(this.categoryService.getAllCategories()),HttpStatus.OK);
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryListDTO getAllCategories(){
+		return new CategoryListDTO(this.categoryService.getAllCategories());
 	}
 	
 	@GetMapping(NAME_URL_PROPERTY)
-	public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable(NAME_PROPERTY) String name) {
-		return new ResponseEntity<CategoryDTO>(this.categoryService.getCategoryByName(name), HttpStatus.OK);
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryDTO getCategoryByName(@PathVariable(NAME_PROPERTY) String name) {
+		return this.categoryService.getCategoryByName(name);
 	}
 	
 }

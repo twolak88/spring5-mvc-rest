@@ -40,5 +40,17 @@ class CustomerMapperTest {
 		assertEquals(LASTNAME, customerDTO.getLastname());
 		assertEquals(CUSTOMER_URL_PREFIX + ID, customerDTO.getCustomerUrl());
 	}
-
+	
+	@Test
+	void testCustomerDTOToCustomer() {
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setFirstname(FIRSTNAME);
+		customerDTO.setLastname(LASTNAME);
+		customerDTO.setCustomerUrl(CUSTOMER_URL_PREFIX + ID);
+		
+		Customer customer = this.customerMapper.customerDTOToCustomer(customerDTO);
+		
+		assertEquals(FIRSTNAME, customer.getFirstname());
+		assertEquals(LASTNAME, customer.getLastname());
+	}
 }

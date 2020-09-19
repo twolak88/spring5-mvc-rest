@@ -24,9 +24,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.twolak.springframework.api.v1.model.CategoryDTO;
 import com.twolak.springframework.services.CategoryService;
+import com.twolak.springframework.services.ResourceNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryControllerTest {
+public class CategoryControllerTest {
 	
 	private static final long CAT_ID_2 = 2L;
 	private static final long CAT_ID_1 = 1L;
@@ -44,7 +45,7 @@ class CategoryControllerTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		this.mockMvc = MockMvcBuilders.standaloneSetup(this.categoryController).build();
+		this.mockMvc = MockMvcBuilders.standaloneSetup(this.categoryController).setControllerAdvice(new RestResponseEntityExceptionHandler()).build();
 	}
 
 	@Test
@@ -83,5 +84,13 @@ class CategoryControllerTest {
 		verify(this.categoryService, times(1)).getCategoryByName(anyString());
 		verifyNoMoreInteractions(this.categoryService);
 	}
-
+	
+	@Test
+	public void testGetByNameNotFound() throws Exception {
+		when(this.categoryService.getCategoryByName(anyString())).thenThrow(ResourceNotFoundException.class);
+		
+		this.mockMvc.perform(get(BASE_URL + "/" + CAT_NAME)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+	}
 }

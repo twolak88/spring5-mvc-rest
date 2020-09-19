@@ -23,6 +23,7 @@ import com.twolak.springframework.domain.Customer;
 import com.twolak.springframework.mapper.CustomerMapper;
 import com.twolak.springframework.repositories.CategoryRepository;
 import com.twolak.springframework.repositories.CustomerRepository;
+import com.twolak.springframework.repositories.VendorRepository;
 import com.twolak.springframework.services.impl.CustomerServiceImpl;
 
 /**
@@ -41,11 +42,14 @@ class CustomerServiceIT {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
+	@Autowired
+	private VendorRepository vendorRepository;
+	
 	private CustomerService customerService;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		Bootstrap bootstrap = new Bootstrap(this.categoryRepository, this.customerRepository);
+		Bootstrap bootstrap = new Bootstrap(this.categoryRepository, this.customerRepository, this.vendorRepository);
 		bootstrap.run();
 		
 		this.customerService = new CustomerServiceImpl(this.customerRepository, CustomerMapper.INSANCE);

@@ -13,6 +13,7 @@ import com.twolak.springframework.domain.Customer;
 import com.twolak.springframework.mapper.CustomerMapper;
 import com.twolak.springframework.repositories.CustomerRepository;
 import com.twolak.springframework.services.CustomerService;
+import com.twolak.springframework.services.ResourceNotFoundException;
 
 /**
  * @author twolak
@@ -32,13 +33,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<CustomerDTO> getAllCustomers() {
-		return this.customerRepository.findAll().stream().map(this.customerMapper::customerToCustomerDTO).collect(Collectors.toList());
+		return this.customerRepository.findAll().stream()
+				.map(this.customerMapper::customerToCustomerDTO).collect(Collectors.toList());
 	}
 
 	@Override
 	public CustomerDTO getCustomerById(Long id) {
 		return this.customerRepository.findById(id).map(this.customerMapper::customerToCustomerDTO)
-				.orElseThrow(()->new RuntimeException("Customer doesn't exist for id: " + id));
+				.orElseThrow(()->new ResourceNotFoundException("Customer doesn't exist for id: " + id));
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
 				customer.setLastname(customerDTO.getLastname());
 			}
 			return this.customerMapper.customerToCustomerDTO(this.customerRepository.save(customer));
-		}).orElseThrow(() -> new RuntimeException("Customer for id: " + id + " not found"));
+		}).orElseThrow(() -> new ResourceNotFoundException("Customer for id: " + id + " not found"));
 	}
 	
 	@Override
