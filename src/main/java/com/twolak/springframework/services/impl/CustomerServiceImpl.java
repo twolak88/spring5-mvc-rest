@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 			if (customerDTO.getLastname() != null) {
 				customer.setLastname(customerDTO.getLastname());
 			}
-			return this.customerMapper.customerToCustomerDTO(customer);
+			return this.customerMapper.customerToCustomerDTO(this.customerRepository.save(customer));
 		}).orElseThrow(() -> new RuntimeException("Customer for id: " + id + " not found"));
 	}
 	

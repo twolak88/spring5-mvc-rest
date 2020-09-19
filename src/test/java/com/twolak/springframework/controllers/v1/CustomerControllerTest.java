@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,6 +41,7 @@ import static com.twolak.springframework.controllers.v1.AbstractRestControllerTe
 @ExtendWith(MockitoExtension.class)
 class CustomerControllerTest {
 	private static final String FIRSTNAME = "Tom";
+	private static final String PATCHED_FIRSTNAME = "Rob";
 	private static final String LASTNAME = "Lastname";
 	private static final String CUSTOMER_URL_PREFIX = "/api/v1/customers/";
 
@@ -140,6 +142,29 @@ class CustomerControllerTest {
 			.andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
 			.andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL_PREFIX + 1L)));
 		verify(this.customerService, times(1)).updateCustomer(anyLong(), any(CustomerDTO.class));
+		verifyNoMoreInteractions(this.customerService);
+	}
+	
+	@Test
+	public void testPatchCustomer() throws Exception {
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setFirstname(PATCHED_FIRSTNAME);
+		
+		CustomerDTO returnCustomerDTO = new CustomerDTO();
+		returnCustomerDTO.setFirstname(customerDTO.getFirstname());
+		returnCustomerDTO.setLastname(LASTNAME);
+		returnCustomerDTO.setCustomerUrl(CUSTOMER_URL_PREFIX + 1L);
+		
+		when(this.customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnCustomerDTO);
+		
+		this.mockMvc.perform(patch("/api/v1/customers/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(customerDTO)))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.firstname", equalTo(PATCHED_FIRSTNAME)))
+			.andExpect(jsonPath("$.lastname", equalTo(LASTNAME)))
+			.andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL_PREFIX + 1L)));
+		verify(this.customerService, times(1)).patchCustomer(anyLong(), any(CustomerDTO.class));
 		verifyNoMoreInteractions(this.customerService);
 	}
 }

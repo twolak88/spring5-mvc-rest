@@ -33,6 +33,7 @@ class CustomerServiceTest {
 	private static final String CUSTOMER_URL_PREFIX = "/api/v1/customers/";
 	private static final Long ID = 1L;
 	private static final String FIRSTNAME = "Tom";
+	private static final String PATCHED_FIRSTNAME = "Rob";
 	private static final String LASTNAME = "Lastname";
 	
 	@Mock
@@ -116,6 +117,34 @@ class CustomerServiceTest {
 		assertEquals(customerDTO.getLastname(), savedCustomerDTO.getLastname());
 		assertEquals(CUSTOMER_URL_PREFIX + ID, savedCustomerDTO.getCustomerUrl());
 		verify(this.customerRepository, times(1)).save(any(Customer.class));
+		verifyNoMoreInteractions(this.customerRepository);
+	}
+	
+	@Test
+	void testPatchCustomer() {
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setFirstname(PATCHED_FIRSTNAME);
+		
+		Customer foundCustomer = new Customer();
+		foundCustomer.setFirstname(FIRSTNAME);
+		foundCustomer.setLastname(LASTNAME);
+		foundCustomer.setId(ID);
+		
+		Customer savedCustomer = new Customer();
+		savedCustomer.setFirstname(PATCHED_FIRSTNAME);
+		savedCustomer.setLastname(LASTNAME);
+		savedCustomer.setId(ID);
+		
+		when(this.customerRepository.findById(anyLong())).thenReturn(Optional.of(foundCustomer));
+		when(this.customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+		
+		CustomerDTO savedCustomerDTO = this.customerService.patchCustomer(ID, customerDTO);
+		
+		assertEquals(savedCustomer.getFirstname(), savedCustomerDTO.getFirstname());
+		assertEquals(savedCustomer.getLastname(), savedCustomerDTO.getLastname());
+		assertEquals(CUSTOMER_URL_PREFIX + ID, savedCustomerDTO.getCustomerUrl());
+		verify(this.customerRepository, times(1)).save(any(Customer.class));
+		verify(this.customerRepository, times(1)).findById(anyLong());
 		verifyNoMoreInteractions(this.customerRepository);
 	}
 
