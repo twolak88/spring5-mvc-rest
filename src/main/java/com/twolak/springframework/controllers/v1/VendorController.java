@@ -39,7 +39,7 @@ public class VendorController {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public VendorListDTO getAllVendors() {
-		return new VendorListDTO(this.vendorService.getAllVendors());
+		return this.vendorService.getAllVendors();
 	}
 	
 	@GetMapping(ID_URL_PROPERTY)

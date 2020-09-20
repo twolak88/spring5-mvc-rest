@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.twolak.springframework.api.v1.model.VendorDTO;
+import com.twolak.springframework.api.v1.model.VendorListDTO;
 import com.twolak.springframework.services.ResourceNotFoundException;
 import com.twolak.springframework.services.VendorService;
 
@@ -71,7 +72,7 @@ public class VendorControllerTest {
 		vendorDTO2.setName(NAME);
 		vendorDTO2.setVendorUrl(VENDOR_URL_PREFIX + VEND_ID_2);
 		
-		when(this.vendorService.getAllVendors()).thenReturn(Arrays.asList(vendorDTO, vendorDTO2));
+		when(this.vendorService.getAllVendors()).thenReturn(new VendorListDTO(Arrays.asList(vendorDTO, vendorDTO2)));
 		
 		this.mockMvc.perform(get(VENDOR_URL_PREFIX)
 				.contentType(MediaType.APPLICATION_JSON))

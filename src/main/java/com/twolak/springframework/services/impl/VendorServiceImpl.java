@@ -3,12 +3,12 @@
  */
 package com.twolak.springframework.services.impl;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.twolak.springframework.api.v1.model.VendorDTO;
+import com.twolak.springframework.api.v1.model.VendorListDTO;
 import com.twolak.springframework.domain.Vendor;
 import com.twolak.springframework.mapper.VendorMapper;
 import com.twolak.springframework.repositories.VendorRepository;
@@ -32,9 +32,9 @@ public class VendorServiceImpl implements VendorService {
 	}
 
 	@Override
-	public List<VendorDTO> getAllVendors() {
-		return this.vendorRepository.findAll().stream()
-				.map(this.vendorMapper::vendorToVendorDTO).collect(Collectors.toList());
+	public VendorListDTO getAllVendors() {
+		return new VendorListDTO(this.vendorRepository.findAll().stream()
+				.map(this.vendorMapper::vendorToVendorDTO).collect(Collectors.toList()));
 	}
 
 	@Override

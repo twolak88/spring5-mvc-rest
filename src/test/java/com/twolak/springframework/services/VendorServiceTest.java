@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.twolak.springframework.api.v1.model.VendorDTO;
+import com.twolak.springframework.api.v1.model.VendorListDTO;
 import com.twolak.springframework.controllers.v1.VendorController;
 import com.twolak.springframework.domain.Vendor;
 import com.twolak.springframework.mapper.VendorMapper;
@@ -48,9 +48,9 @@ class VendorServiceTest {
 	void testGetAllVendors() {
 		when(this.vendorRepository.findAll()).thenReturn(Arrays.asList(new Vendor(), new Vendor()));
 		
-		List<VendorDTO> vendorDTOs = this.vendorService.getAllVendors();
+		VendorListDTO vendorDTOs = this.vendorService.getAllVendors();
 		
-		assertEquals(2, vendorDTOs.size());
+		assertEquals(2, vendorDTOs.getVendors().size());
 		verify(this.vendorRepository, times(1)).findAll();
 		verifyNoMoreInteractions(this.vendorRepository);
 	}
