@@ -19,10 +19,14 @@ import com.twolak.springframework.api.v1.model.VendorDTO;
 import com.twolak.springframework.api.v1.model.VendorListDTO;
 import com.twolak.springframework.services.VendorService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * @author twolak
  *
  */
+@Api(tags = {"VendorController"})
 @RestController
 @RequestMapping(VendorController.BASE_URL)
 public class VendorController {
@@ -36,36 +40,42 @@ public class VendorController {
 		this.vendorService = vendorService;
 	}
 	
+	@ApiOperation(value = "This will get a list of vendors", notes = "There are some notes about the Vendor API")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public VendorListDTO getAllVendors() {
 		return this.vendorService.getAllVendors();
 	}
 	
+	@ApiOperation(value = "Get Vendor")
 	@GetMapping(ID_URL_PROPERTY)
 	@ResponseStatus(HttpStatus.OK)
 	public VendorDTO getVendorById(@PathVariable(ID_PROPERTY) Long id) {
 		return this.vendorService.getVendorById(id);
 	}
 	
+	@ApiOperation(value = "Create new Vendor")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public VendorDTO createNewVendor(@RequestBody VendorDTO vendorDTO) {
 		return this.vendorService.createNewVendor(vendorDTO);
-	}
+	}	
 	
+	@ApiOperation(value = "Update vendor")
 	@PutMapping(ID_URL_PROPERTY)
 	@ResponseStatus(HttpStatus.OK)
 	public VendorDTO updateVendor(@PathVariable(ID_PROPERTY) Long id, @RequestBody VendorDTO vendorDTO) {
 		return this.vendorService.updateVendor(id, vendorDTO);
 	}
 	
+	@ApiOperation(value = "Patch vendor")
 	@PatchMapping(ID_URL_PROPERTY)
 	@ResponseStatus(HttpStatus.OK)
 	public VendorDTO patchVendor(@PathVariable(ID_PROPERTY) Long id, @RequestBody VendorDTO vendorDTO) {
 		return this.vendorService.patchVendor(id, vendorDTO);
 	}
 	
+	@ApiOperation(value = "Delete a vendor")
 	@DeleteMapping(ID_URL_PROPERTY)
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteVendor(@PathVariable(ID_PROPERTY) Long id) {

@@ -14,10 +14,13 @@ import com.twolak.springframework.api.v1.model.CategoryDTO;
 import com.twolak.springframework.api.v1.model.CategoryListDTO;
 import com.twolak.springframework.services.CategoryService;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author twolak
  *
  */
+@Api(tags = {"CategoryController"})
 @RestController
 @RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
