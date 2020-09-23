@@ -73,7 +73,8 @@ public class VendorControllerIT {
 		given(this.vendorService.getAllVendors()).willReturn(vendorListDTO);
 		
 		this.mockMvc.perform(get(VENDOR_URL_PREFIX)
-				.contentType(MediaType.APPLICATION_JSON))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.vendors", hasSize(2)));
 		then(this.vendorService).should(times(1)).getAllVendors();
@@ -85,7 +86,8 @@ public class VendorControllerIT {
 		given(this.vendorService.getVendorById(anyLong())).willReturn(this.vendorDTO_1);
 		
 		this.mockMvc.perform(get(VENDOR_URL_PREFIX + VEND_ID_1)
-				.contentType(MediaType.APPLICATION_JSON))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.name", equalTo(this.vendorDTO_1.getName())));
 		then(this.vendorService).should(times(1)).getVendorById(anyLong());
@@ -97,7 +99,8 @@ public class VendorControllerIT {
 		given(this.vendorService.getVendorById(anyLong())).willThrow(ResourceNotFoundException.class);
 		
 		this.mockMvc.perform(get(VENDOR_URL_PREFIX + VEND_ID_1)
-				.contentType(MediaType.APPLICATION_JSON))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 	}
 	
@@ -107,6 +110,7 @@ public class VendorControllerIT {
 		
 		this.mockMvc.perform(post(VENDOR_URL_PREFIX)
 				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
 				.content(asJsonString(this.vendorDTO_1)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.name", equalTo(this.vendorDTO_1.getName())))
@@ -121,6 +125,7 @@ public class VendorControllerIT {
 		
 		this.mockMvc.perform(put(VENDOR_URL_PREFIX + VEND_ID_1)
 				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
 				.content(asJsonString(this.vendorDTO_1)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.name", equalTo(this.vendorDTO_1.getName())))
@@ -135,6 +140,7 @@ public class VendorControllerIT {
 		
 		this.mockMvc.perform(patch(VENDOR_URL_PREFIX + VEND_ID_1)
 				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
 				.content(asJsonString(this.vendorDTO_1)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.name", equalTo(this.vendorDTO_1.getName())))
@@ -146,7 +152,8 @@ public class VendorControllerIT {
 	@Test
 	public void testDeleteVendor() throws Exception {
 		this.mockMvc.perform(delete(VENDOR_URL_PREFIX + VEND_ID_1)
-				.contentType(MediaType.APPLICATION_JSON))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
 		then(this.vendorService).should(times(1)).deleteVendorById(anyLong());
 		then(this.vendorService).shouldHaveNoMoreInteractions();
