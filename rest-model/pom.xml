@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.twolak.springframework</groupId>
+		<artifactId>spring5-mvc-rest-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>rest-model</artifactId>
+	<name>rest-model</name>
+	<description>spring 5 rest simple application</description>
+	<packaging>jar</packaging>
+	<properties>
+		<jaxb2.project.version>2.3.1</jaxb2.project.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>${jaxb2.project.version}</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- The package of your generated sources -->
+					<packageName>com.twolak.springframework.model</packageName>
+					<sources>
+						<source>src/main/resources/xsd</source>
+					</sources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
